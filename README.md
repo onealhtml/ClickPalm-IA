@@ -130,31 +130,16 @@ O sistema gera arquivos JSON com a seguinte estrutura:
 - **Google Generative AI (Gemini)**: Modelo de IA para análise de texto
 - **python-dotenv**: Gerenciamento de variáveis de ambiente
 
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para:
-
-1. Fazer um fork do projeto
-2. Criar uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abrir um Pull Request
-
 ## ⚠️ Avisos Importantes
 
 - **Privacidade**: Este sistema processa dados médicos sensíveis. Garanta conformidade com LGPD/HIPAA
 - **Uso Clínico**: Os resultados devem ser validados por profissionais qualificados
 - **API**: Verifique os limites de uso da API do Google Gemini
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
 ## 👨‍💻 Autor
 
-Desenvolvido por [Lorenzo Farias](https://github.com/onealhtml)
+Desenvolvido por [Lorenzo Farias](https://github.com/onealhtml). Todos os direitos reservados.
 
 ---
 
 ⭐ Se este projeto foi útil para você, considere dar uma estrela no GitHub!
-
