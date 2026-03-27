@@ -45,7 +45,13 @@ class FileProcessor:
 
         # Analisa com Gemini
         print(f"Analisando: {os.path.basename(file_path)}")
-        analysis = self.gemini_client.analyze_exam(exam_content)
+        analysis, elapsed_ns = self.gemini_client.analyze_exam_with_timing(exam_content)
+        elapsed_seconds = elapsed_ns / 1_000_000_000
+        elapsed_milliseconds = elapsed_ns / 1_000_000
+        print(
+            f"Tempo da resposta da IA: {elapsed_seconds:.6f} s "
+            f"({elapsed_milliseconds:.3f} ms)"
+        )
 
         # Salva o resultado
         self._save_json(json_file, analysis)
