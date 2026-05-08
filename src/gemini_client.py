@@ -44,10 +44,10 @@ class GeminiClient:
         prompt = get_analysis_prompt(exam_content)
 
         try:
-            start_ns = time.perf_counter_ns()
-            response = self.model.generate_content(prompt)
-            elapsed_ns = time.perf_counter_ns() - start_ns
-            return self._parse_response(response.text), elapsed_ns
+           start_ns = time.perf_counter_ns()
+           response = self.model.generate_content(prompt)
+           elapsed_ns = time.perf_counter_ns() - start_ns
+           return self._parse_response(response.text), elapsed_ns
         except Exception as e:
             raise Exception(f"Erro ao analisar exame com Gemini: {e}")
 
