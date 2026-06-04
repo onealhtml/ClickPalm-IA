@@ -21,7 +21,7 @@ class Config:
     @property
     def model_name(self) -> str:
         """Retorna o nome do modelo Gemini a ser utilizado."""
-        return os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
+        return os.getenv('GEMINI_MODEL', 'gemini-3.1-flash-lite')
 
     @property
     def exams_directory(self) -> str:

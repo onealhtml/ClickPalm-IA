@@ -2,3 +2,6 @@
 /.idea/
 .idea
 /exames/
+.env
+__pycache__/
+*.py[cod]
