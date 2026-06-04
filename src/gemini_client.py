@@ -3,7 +3,7 @@ Cliente para interação com a API do Google Gemini.
 """
 import json
 import time
-import google.generativeai as genai
+from google import genai
 
 from src.config import config
 from src.prompts import get_analysis_prompt
@@ -14,8 +14,8 @@ class GeminiClient:
 
     def __init__(self):
         """Inicializa o cliente Gemini."""
-        genai.configure(api_key=config.gemini_api_key)
-        self.model = genai.GenerativeModel(config.model_name)
+        self.client = genai.Client(api_key=config.gemini_api_key)
+        self.model_name = config.model_name
 
     def analyze_exam(self, exam_content: str) -> dict:
         """
@@ -45,7 +45,10 @@ class GeminiClient:
 
         try:
             start_ns = time.perf_counter_ns()
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+            )
             elapsed_ns = time.perf_counter_ns() - start_ns
             return self._parse_response(response.text), elapsed_ns
         except Exception as e:
