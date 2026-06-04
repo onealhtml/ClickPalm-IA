@@ -141,8 +141,10 @@ def main():
     print("=" * 70)
 
     results = []
-    gemini_timings_all = []
+    gemini_timings_all = []   # todas as chamadas (todos os laudos x runs)
     nova_timings_all = []
+    gemini_exam_means = []     # média de tempo por laudo (entre os runs)
+    nova_exam_means = []
     field_match_counts = {f: 0 for f in PRESENCE_FIELDS + ["bi_rads"]}
     field_compared = 0  # laudos onde ambos extraíram com sucesso
     total_matches = 0
@@ -154,13 +156,17 @@ def main():
         content = read_file(path)
         base = os.path.splitext(path)[0]
 
-        entry = {"file": name}
+        entry: dict = {"file": name}
 
         # Gemini
         try:
             g_analysis, g_timings = run_model(gemini, content, args.runs)
             gemini_timings_all.extend(g_timings)
-            entry["gemini"] = {"timings_ms": g_timings, "analysis": g_analysis}
+            g_mean = statistics.mean(g_timings)
+            gemini_exam_means.append(g_mean)
+            entry["gemini"] = {
+                "timings_ms": g_timings, "mean_ms": g_mean, "analysis": g_analysis,
+            }
             with open(f"{base}_gemini.json", "w", encoding="utf-8") as f:
                 json.dump(g_analysis, f, ensure_ascii=False, indent=4)
             print(f"  Gemini -> {_fmt_ms(g_timings)}")
@@ -173,7 +179,11 @@ def main():
         try:
             n_analysis, n_timings = run_model(nova, content, args.runs)
             nova_timings_all.extend(n_timings)
-            entry["nova"] = {"timings_ms": n_timings, "analysis": n_analysis}
+            n_mean = statistics.mean(n_timings)
+            nova_exam_means.append(n_mean)
+            entry["nova"] = {
+                "timings_ms": n_timings, "mean_ms": n_mean, "analysis": n_analysis,
+            }
             with open(f"{base}_nova.json", "w", encoding="utf-8") as f:
                 json.dump(n_analysis, f, ensure_ascii=False, indent=4)
             print(f"  Nova   -> {_fmt_ms(n_timings)}")
@@ -203,8 +213,11 @@ def main():
     print("\n" + "=" * 70)
     print("RESUMO")
     print("=" * 70)
-    print(f"Tempo Gemini: {_fmt_ms(gemini_timings_all)}")
-    print(f"Tempo Nova:   {_fmt_ms(nova_timings_all)}")
+    print(f"Gemini: {_summary_timing(gemini_exam_means, gemini_timings_all)}")
+    print(f"Nova:   {_summary_timing(nova_exam_means, nova_timings_all)}")
+
+    grand_total_s = (sum(gemini_timings_all) + sum(nova_timings_all)) / 1000
+    print(f"Tempo total (Gemini + Nova): {grand_total_s:.2f} s")
 
     if gemini_timings_all and nova_timings_all:
         g_med = statistics.median(gemini_timings_all)
@@ -233,8 +246,8 @@ def main():
         "nova_model": nova.model_name,
         "aws_region": config.aws_region,
         "timing_ms": {
-            "gemini": _timing_stats(gemini_timings_all),
-            "nova": _timing_stats(nova_timings_all),
+            "gemini": _timing_stats(gemini_timings_all, gemini_exam_means),
+            "nova": _timing_stats(nova_timings_all, nova_exam_means),
         },
         "agreement": {
             "exams_compared": field_compared,
@@ -254,17 +267,33 @@ def main():
     print("=" * 70)
 
 
-def _timing_stats(values) -> dict:
+def _summary_timing(exam_means, all_timings) -> str:
+    """Linha de resumo com média por exame, mediana por exame e tempo total."""
+    if not all_timings:
+        return "n/a"
+    return (
+        f"média/exame {statistics.mean(exam_means):8.1f} ms | "
+        f"mediana/exame {statistics.median(exam_means):8.1f} ms | "
+        f"total {sum(all_timings) / 1000:7.2f} s ({len(all_timings)} chamadas)"
+    )
+
+
+def _timing_stats(values, exam_means=None) -> dict:
     """Resumo estatístico de uma lista de tempos (ms)."""
     if not values:
         return {}
-    return {
+    stats = {
         "count": len(values),
         "mean": statistics.mean(values),
         "median": statistics.median(values),
         "min": min(values),
         "max": max(values),
+        "total": sum(values),
     }
+    if exam_means:
+        stats["mean_per_exam"] = statistics.mean(exam_means)
+        stats["median_per_exam"] = statistics.median(exam_means)
+    return stats
 
 
 if __name__ == "__main__":
