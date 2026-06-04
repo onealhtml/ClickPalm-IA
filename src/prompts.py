@@ -68,7 +68,7 @@ Diretrizes de Interpretação:
 
 Exemplos Selecionados:
 
-Exemplo 1:
+Exemplo 1 (Nódulo sólido suspeito que PERMANECE nódulo; o cisto oleoso é um achado distinto. "Com correspondência ao ultrassom" confirma o nódulo, NÃO o reclassifica como cisto):
 ENTRADA:
 MAMOGRAFIA DIGITAL DR* BILATERAL
 
@@ -86,22 +86,22 @@ Ausência de microcalcificações pleomórficas agrupadas ou ramificadas. Implan
 SAÍDA:
 Cisto:
 - Status: presente
-- Localização: Imagem cística com conteúdo denso em RRA da mama esquerda; Cistos simples e de conteúdo denso esparsos bilateralmente.
-- Tamanho: 2,0 cm (RRA mama esquerda); até 1,2 cm (bilateralmente)
-Nódulo:
-- Status: ausente
-- Localização: [sem referência no texto]
+- Localização: Cisto oleoso na mama esquerda
 - Tamanho: [sem referência no texto]
+Nódulo:
+- Status: presente
+- Localização: QSE da mama esquerda; contornos espiculados, associado a retração cutânea, com correspondência ao ultrassom
+- Tamanho: [sem medida numérica; referido como maior em relação ao exame de 01/2024]
 Calcificação:
 - Status: presente
-- Localização: bilaterais com características de benignidade
+- Localização: calcificações esparsas
 - Tamanho: [sem referência no texto]
 Microcalcificação:
 - Status: ausente
 - Localização: [sem referência no texto]
 - Tamanho: [sem referência no texto]
-BI-RADS: 4
-Outras citações a avaliar: Área hipoecogênica heterogênea, irregular, medindo cerca de 2,4 cm às 12h justareolar da mama direita, pode estar relacionado a ectasia ductal com discreta distorção arquitetural.
+BI-RADS: 5
+Outras citações a avaliar: Status pós cirurgia conservadora da mama esquerda; parênquima heterogeneamente denso com alterações arquiteturais relacionadas à mamoplastia; implante bilateral sem sinais de roturas extracapsulares; linfonodo axilar de aspecto reacional; prosseguir com core biopsy.
 
 Exemplo 2:
 ENTRADA:
@@ -171,6 +171,8 @@ Microcalcificação:
 - Tamanho: [sem referência no texto]
 BI-RADS: 4
 Outras citações a avaliar: Parênquima denso. Nódulo suspeito. Ultrassonografia confirmou o nódulo sólido. Linfonodos axilares sem alterações.
+
+IMPORTANTE: Baseie a extração EXCLUSIVAMENTE no "RELATÓRIO DO EXAME" fornecido no final. Os exemplos acima ilustram apenas o formato e as regras de interpretação — NÃO reutilize localizações, tamanhos ou achados que apareçam neles.
 
 IMPORTANTE: Retorne a resposta APENAS em formato JSON válido, seguindo exatamente esta estrutura:
 {{
