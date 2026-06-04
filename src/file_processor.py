@@ -5,15 +5,15 @@ import json
 import os
 from typing import Optional
 
-from src.gemini_client import GeminiClient
+from src.ai_client import get_ai_client
 
 
 class FileProcessor:
     """Processador de arquivos de exames médicos."""
 
     def __init__(self):
-        """Inicializa o processador."""
-        self.gemini_client = GeminiClient()
+        """Inicializa o processador com o provedor de IA configurado."""
+        self.ai_client = get_ai_client()
 
     def process_file(self, file_path: str, force_reprocess: bool = False) -> dict:
         """
@@ -43,9 +43,9 @@ class FileProcessor:
         # Lê o conteúdo do arquivo
         exam_content = self._read_file(file_path)
 
-        # Analisa com Gemini
-        print(f"Analisando: {os.path.basename(file_path)}")
-        analysis, elapsed_ns = self.gemini_client.analyze_exam_with_timing(exam_content)
+        # Analisa com o provedor de IA configurado
+        print(f"Analisando ({self.ai_client.provider}): {os.path.basename(file_path)}")
+        analysis, elapsed_ns = self.ai_client.analyze_exam_with_timing(exam_content)
         elapsed_seconds = elapsed_ns / 1_000_000_000
         elapsed_milliseconds = elapsed_ns / 1_000_000
         print(
