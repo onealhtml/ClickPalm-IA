@@ -66,6 +66,11 @@ Diretrizes de Interpretação:
     * Microcalcificações: estruturas menores, frequentemente descritas como "puntiformes", "pleomórficas", "lineares", "agrupadas", "em cluster".
     * Se o relatório mencionar "microcalcificações" especificamente, classifique como microcalcificações. Se mencionar apenas "calcificações" (e a descrição não sugerir microcalcificações), classifique como calcificações.
 
+5.  Extração do BI-RADS:
+    * Retorne sempre o BI-RADS como número arábico em string: "0", "1", "2", "3", "4", "5" ou "6".
+    * Converta categorias em algarismos romanos: I=1, II=2, III=3, IV=4, V=5, VI=6.
+    * Em laudos combinados (ex.: mamografia seguida de ecografia), se a mamografia indicar categoria 0 por necessidade de correlação e a ecografia/comentário final trouxer outra categoria, use a categoria final/complementar mais conclusiva. Ex.: "Categoria 0" na mamografia e depois "categoria V" na ecografia deve retornar BI-RADS "5".
+
 Exemplos Selecionados:
 
 Exemplo 1 (Nódulo sólido suspeito que PERMANECE nódulo; o cisto oleoso é um achado distinto. "Com correspondência ao ultrassom" confirma o nódulo, NÃO o reclassifica como cisto):
@@ -199,4 +204,3 @@ IMPORTANTE: Retorne a resposta APENAS em formato JSON válido, seguindo exatamen
 RELATÓRIO DO EXAME:
 {exam_content}
 """
-
