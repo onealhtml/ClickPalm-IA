@@ -116,7 +116,7 @@ def generate_xlsx_report(input_path: str, output_path: str) -> str:
 
 def _build_summary_sheet(ws, report: dict[str, Any]) -> None:
     ws.sheet_properties.tabColor = COLORS["navy"]
-    ws.freeze_panes = "A9"
+    ws.freeze_panes = None
 
     _title(ws, "ClickPalm-IA - Relatorio de Comparacao", "Gemini vs Amazon Nova Lite")
 
