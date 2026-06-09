@@ -58,8 +58,27 @@ O `compare.py` mede:
 Saídas geradas:
 
 - `comparison_report.json` — relatório completo (tempos + concordância + saídas).
+- `comparison_report.xlsx` — relatório formatado para análise e uso no artigo.
 - `<laudo>_gemini.json` e `<laudo>_nova.json` — extrações lado a lado para
   revisão manual das divergências.
+
+O Excel é gerado automaticamente ao final do `compare.py`. Para recriar apenas
+o `.xlsx` a partir de um JSON já existente, sem chamar as APIs novamente:
+
+```bash
+python report_xlsx.py
+python report_xlsx.py --input comparison_report.json --output comparison_report.xlsx
+```
+
+Abas do relatório XLSX:
+
+- `Resumo` — métricas agregadas, concordância geral e gráficos.
+- `Tempos` — tempo médio/mediano por laudo e modelo.
+- `Execucoes` — tempos de cada execução quando `--runs` for maior que 1.
+- `Concordancia` — comparação campo a campo.
+- `Divergencias` — campos divergentes e erros de extração.
+- `Extracoes` — saídas completas lado a lado.
+- `Metodologia` — notas para interpretação dos resultados.
 
 ## Estrutura de Saída
 

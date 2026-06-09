@@ -119,6 +119,14 @@ def main():
         "--report", default="comparison_report.json",
         help="Caminho do relatório JSON de saída (padrão: comparison_report.json).",
     )
+    parser.add_argument(
+        "--xlsx-report", default="comparison_report.xlsx",
+        help="Caminho do relatório XLSX de saída (padrão: comparison_report.xlsx).",
+    )
+    parser.add_argument(
+        "--no-xlsx", action="store_true",
+        help="Não gera o relatório XLSX formatado após salvar o JSON.",
+    )
     args = parser.parse_args()
 
     exams_dir = args.exams_dir
@@ -263,6 +271,14 @@ def main():
     with open(args.report, "w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=4)
     print(f"\nRelatório salvo em: {args.report}")
+    if not args.no_xlsx:
+        try:
+            from report_xlsx import generate_xlsx_report
+
+            generate_xlsx_report(args.report, args.xlsx_report)
+            print(f"Relatório XLSX salvo em: {args.xlsx_report}")
+        except Exception as e:
+            print(f"Não foi possível gerar o relatório XLSX: {e}")
     print("Saídas por laudo salvas como *_gemini.json e *_nova.json")
     print("=" * 70)
 
