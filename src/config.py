@@ -29,6 +29,37 @@ class Config:
         return os.getenv('GEMINI_MODEL', 'gemini-3.1-flash-lite')
 
     @property
+    def gemini_requests_per_minute(self) -> int:
+        """Limite local de chamadas por minuto ao Gemini. Use 0 para desativar."""
+        return self._get_int_env('GEMINI_REQUESTS_PER_MINUTE', 10, minimum=0)
+
+    @property
+    def gemini_max_retries(self) -> int:
+        """Número de novas tentativas para erros transitórios do Gemini."""
+        return self._get_int_env('GEMINI_MAX_RETRIES', 6, minimum=0)
+
+    @property
+    def gemini_retry_initial_delay_seconds(self) -> float:
+        """Espera inicial do retry exponencial do Gemini."""
+        return self._get_float_env(
+            'GEMINI_RETRY_INITIAL_DELAY_SECONDS', 2.0, minimum=0.0
+        )
+
+    @property
+    def gemini_retry_max_delay_seconds(self) -> float:
+        """Espera máxima entre retries do Gemini."""
+        return self._get_float_env(
+            'GEMINI_RETRY_MAX_DELAY_SECONDS', 60.0, minimum=0.0
+        )
+
+    @property
+    def gemini_retry_jitter_seconds(self) -> float:
+        """Variação aleatória somada ao retry para evitar rajadas sincronizadas."""
+        return self._get_float_env(
+            'GEMINI_RETRY_JITTER_SECONDS', 1.5, minimum=0.0
+        )
+
+    @property
     def aws_region(self) -> str:
         """Retorna a região AWS utilizada pelo Amazon Bedrock."""
         return os.getenv('AWS_REGION', 'us-east-1')
@@ -53,7 +84,34 @@ class Config:
                 "Crie um arquivo .env com sua chave da API."
             )
 
+    def _get_int_env(self, name: str, default: int, minimum: int | None = None) -> int:
+        """Lê inteiro de variável de ambiente com mensagem clara em caso inválido."""
+        raw = os.getenv(name)
+        if raw is None or raw == '':
+            return default
+        try:
+            value = int(raw)
+        except ValueError as exc:
+            raise ValueError(f"{name} deve ser um número inteiro.") from exc
+        if minimum is not None and value < minimum:
+            raise ValueError(f"{name} deve ser maior ou igual a {minimum}.")
+        return value
+
+    def _get_float_env(
+        self, name: str, default: float, minimum: float | None = None
+    ) -> float:
+        """Lê float de variável de ambiente com mensagem clara em caso inválido."""
+        raw = os.getenv(name)
+        if raw is None or raw == '':
+            return default
+        try:
+            value = float(raw)
+        except ValueError as exc:
+            raise ValueError(f"{name} deve ser um número.") from exc
+        if minimum is not None and value < minimum:
+            raise ValueError(f"{name} deve ser maior ou igual a {minimum}.")
+        return value
+
 
 # Instância global de configuração
 config = Config()
-

@@ -15,9 +15,34 @@ Copie `.env.example` para `.env` e preencha as credenciais:
 AI_PROVIDER=gemini            # 'gemini' ou 'nova'
 GEMINI_API_KEY=sua_chave_aqui
 GEMINI_MODEL=gemini-3.1-flash-lite
+GEMINI_REQUESTS_PER_MINUTE=10
+GEMINI_MAX_RETRIES=6
 AWS_REGION=us-east-1
 NOVA_MODEL_ID=us.amazon.nova-lite-v1:0
 ```
+
+### Limite e instabilidade do Gemini free
+
+O cliente Gemini tem proteção local contra estouro de requests por minuto e
+retry automático para erros transitórios, como `429`, `503 UNAVAILABLE`,
+`RESOURCE_EXHAUSTED` e `UNAVAILABLE`.
+
+Configurações úteis no `.env`:
+
+```
+GEMINI_REQUESTS_PER_MINUTE=10
+GEMINI_MAX_RETRIES=6
+GEMINI_RETRY_INITIAL_DELAY_SECONDS=2
+GEMINI_RETRY_MAX_DELAY_SECONDS=60
+GEMINI_RETRY_JITTER_SECONDS=1.5
+```
+
+Com `GEMINI_REQUESTS_PER_MINUTE=10`, o sistema espera cerca de 6 segundos entre
+chamadas ao Gemini. Se sua cota free for menor, reduza para `5` ou `3`. Use
+`0` apenas se quiser desativar o limitador local.
+
+No `compare.py`, cada laudo executa o Gemini uma vez por `--runs`. Exemplo:
+`100` laudos com `--runs 3` geram `300` chamadas ao Gemini.
 
 ### Acesso ao Amazon Nova (Bedrock)
 
